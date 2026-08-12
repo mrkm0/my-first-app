@@ -3,18 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Pac-Man Arcade Deluxe</title>
+    <title>Kawaii Pac-Man 🎀✨</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts for Arcade Style -->
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <!-- Google Fonts for Cute Kawaii Style -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Mochiy+Pop+One&display=swap" rel="stylesheet">
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
+        :root {
+            --pastel-pink: #ff9ecc;
+            --pastel-purple: #c084fc;
+            --pastel-yellow: #ffe066;
+            --pastel-cyan: #70e0d8;
+            --pastel-peach: #ffb366;
+        }
+
         body {
-            font-family: 'Press Start 2P', monospace, sans-serif;
-            background-color: #050508;
+            font-family: 'Fredoka', sans-serif;
+            background: radial-gradient(circle at 50% 20%, #2e1d3e 0%, #150f21 100%);
             color: #ffffff;
             touch-action: manipulation;
             user-select: none;
@@ -22,19 +30,37 @@
             overflow-x: hidden;
         }
 
-        .arcade-border {
-            border: 4px solid #1e3a8a;
-            box-shadow: 0 0 15px #2563eb, inset 0 0 15px #2563eb;
+        .font-kawaii {
+            font-family: 'Mochiy Pop One', cursive;
         }
 
-        .neon-text-yellow {
-            color: #ffeb3b;
-            text-shadow: 0 0 8px rgba(255, 235, 59, 0.7);
+        .kawaii-card {
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 2px solid rgba(255, 158, 204, 0.35);
+            box-shadow: 0 8px 32px 0 rgba(255, 158, 204, 0.15), inset 0 0 12px rgba(255, 158, 204, 0.1);
         }
 
-        .neon-text-blue {
-            color: #3b82f6;
-            text-shadow: 0 0 8px rgba(59, 130, 246, 0.7);
+        .kawaii-border {
+            border: 4px solid #ff9ecc;
+            box-shadow: 0 0 20px rgba(255, 158, 204, 0.4), inset 0 0 15px rgba(255, 158, 204, 0.2);
+            border-radius: 20px;
+        }
+
+        .text-glow-pink {
+            color: #ff9ecc;
+            text-shadow: 0 0 12px rgba(255, 158, 204, 0.8), 0 0 20px rgba(255, 158, 204, 0.4);
+        }
+
+        .text-glow-yellow {
+            color: #ffe066;
+            text-shadow: 0 0 12px rgba(255, 224, 102, 0.8), 0 0 20px rgba(255, 224, 102, 0.4);
+        }
+
+        .text-glow-cyan {
+            color: #70e0d8;
+            text-shadow: 0 0 12px rgba(112, 224, 216, 0.8);
         }
 
         #game-container {
@@ -46,97 +72,132 @@
         }
 
         canvas {
-            background-color: #000000;
+            background-color: #160f22;
             display: block;
-            border-radius: 8px;
         }
 
         .d-btn {
-            background: linear-gradient(145deg, #1f2937, #111827);
-            border: 2px solid #374151;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.5);
-            transition: all 0.1s ease;
+            background: linear-gradient(145deg, #ff9ecc, #d946ef);
+            border: 2px solid #ffc0e3;
+            box-shadow: 0 4px 15px rgba(217, 70, 239, 0.4);
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .d-btn:active {
-            background: #374151;
-            transform: scale(0.95);
-            box-shadow: 0 1px 2px rgba(0,0,0,0.5);
+            transform: scale(0.92);
+            box-shadow: 0 2px 5px rgba(217, 70, 239, 0.6);
+            background: linear-gradient(145deg, #d946ef, #c084fc);
+        }
+
+        .bounce-gentle {
+            animation: bounceGentle 2s infinite ease-in-out;
+        }
+
+        @keyframes bounceGentle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .sparkle-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, #ff9ecc, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 40px 70px, #ffe066, rgba(0,0,0,0)),
+                radial-gradient(1.5px 1.5px at 90px 40px, #70e0d8, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 160px 120px, #ffb366, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 220px 220px;
+            opacity: 0.3;
+            z-index: 0;
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-between p-2 md:p-4 select-none">
+<body class="min-h-screen flex flex-col items-center justify-between p-2 md:p-4 select-none relative">
+
+    <div class="sparkle-bg"></div>
 
     <!-- Top Bar / Scoreboard -->
-    <header class="w-full max-w-lg flex flex-col gap-2 mb-2">
-        <div class="flex justify-between items-center bg-gray-900 border-2 border-blue-900 rounded-lg p-3 arcade-border">
+    <header class="w-full max-w-lg flex flex-col gap-2 mb-2 z-10">
+        <div class="flex justify-between items-center kawaii-card rounded-2xl p-3">
             <div class="flex flex-col">
-                <span class="text-[10px] text-gray-400">SCORE</span>
-                <span id="score" class="text-lg neon-text-yellow">00</span>
+                <span class="text-xs text-pink-300 font-semibold tracking-wider flex items-center gap-1">
+                    <i class="fas fa-star text-yellow-300 text-[10px]"></i> SCORE
+                </span>
+                <span id="score" class="text-xl font-kawaii text-glow-yellow">00</span>
             </div>
             <div class="flex flex-col items-center">
-                <span class="text-[10px] text-gray-400">STAGE</span>
-                <span id="stage-num" class="text-lg text-green-400">1</span>
+                <span class="text-xs text-purple-300 font-semibold tracking-wider flex items-center gap-1">
+                    <i class="fas fa-crown text-yellow-300 text-[10px]"></i> STAGE
+                </span>
+                <span id="stage-num" class="text-xl font-kawaii text-glow-pink">1</span>
             </div>
             <div class="flex flex-col items-end">
-                <span class="text-[10px] text-gray-400">HIGH SCORE</span>
-                <span id="high-score" class="text-lg text-white">00</span>
+                <span class="text-xs text-cyan-300 font-semibold tracking-wider flex items-center gap-1">
+                    <i class="fas fa-trophy text-yellow-300 text-[10px]"></i> HIGH
+                </span>
+                <span id="high-score" class="text-xl font-kawaii text-glow-cyan">00</span>
             </div>
         </div>
 
-        <div class="flex justify-between items-center px-2">
-            <!-- Lives Display -->
+        <div class="flex justify-between items-center px-3">
+            <!-- Lives Display (Kawaii Hearts) -->
             <div class="flex items-center gap-2">
-                <span class="text-[10px] text-gray-400">LIVES:</span>
-                <div id="lives-container" class="flex gap-1">
-                    <!-- Dynamic Pacman Lives Icons -->
+                <span class="text-xs text-pink-300 font-semibold tracking-wide">LIFE:</span>
+                <div id="lives-container" class="flex gap-1.5 items-center">
+                    <!-- Dynamic Kawaii Heart Icons -->
                 </div>
             </div>
             <!-- Sound Toggle Button -->
-            <button id="sound-btn" class="text-xs bg-gray-800 hover:bg-gray-700 text-yellow-400 px-3 py-1.5 rounded-md border border-gray-600 transition flex items-center gap-1">
-                <i id="sound-icon" class="fas fa-volume-up"></i>
-                <span id="sound-text">SOUND ON</span>
+            <button id="sound-btn" class="text-xs bg-pink-900/40 hover:bg-pink-800/60 text-pink-200 px-3.5 py-1.5 rounded-full border border-pink-400/40 transition flex items-center gap-1.5 shadow-sm active:scale-95">
+                <i id="sound-icon" class="fas fa-volume-up text-pink-300"></i>
+                <span id="sound-text" class="font-semibold">SOUND ON</span>
             </button>
         </div>
     </header>
 
     <!-- Game Container & Canvas -->
-    <main id="game-container" class="w-full max-w-lg relative">
-        <canvas id="canvas" class="arcade-border"></canvas>
+    <main id="game-container" class="w-full max-w-lg relative z-10">
+        <canvas id="canvas" class="kawaii-border"></canvas>
 
         <!-- Start / Game Over Overlay Modal -->
-        <div id="overlay" class="absolute inset-0 bg-black/85 backdrop-blur-sm rounded-lg flex flex-col items-center justify-center p-6 text-center z-10 transition-opacity duration-300">
-            <h1 id="overlay-title" class="text-2xl md:text-3xl neon-text-yellow mb-4 animate-pulse">PAC-MAN DELUXE</h1>
-            <p id="overlay-subtitle" class="text-xs md:text-sm text-gray-300 mb-8 leading-relaxed">
-                キーボード(WASD / 矢印キー)<br>画面スワイプ または D-Padボタンで操作
+        <div id="overlay" class="absolute inset-0 bg-purple-950/85 backdrop-blur-md rounded-2xl flex flex-col items-center justify-center p-6 text-center z-20 transition-all duration-300">
+            <div class="bounce-gentle mb-2 text-3xl">🎀✨</div>
+            <h1 id="overlay-title" class="text-2xl md:text-3xl font-kawaii text-glow-pink mb-3">KAWAII PAC-MAN</h1>
+            <p id="overlay-subtitle" class="text-xs md:text-sm text-pink-200 mb-6 leading-relaxed bg-pink-900/30 px-4 py-2 rounded-xl border border-pink-500/20">
+                キーボード(WASD / 矢印キー)<br>画面スワイプ または D-Padでそうさしてね🌸
             </p>
-            <button id="start-btn" class="bg-yellow-400 hover:bg-yellow-300 text-black font-bold text-sm px-6 py-3 rounded-full shadow-lg transform transition active:scale-95 border-2 border-yellow-200">
-                START GAME
+            <button id="start-btn" class="bg-gradient-to-r from-pink-400 via-purple-400 to-pink-400 hover:from-pink-300 hover:to-purple-300 text-white font-kawaii text-sm px-8 py-3.5 rounded-full shadow-lg shadow-pink-500/30 transform transition active:scale-95 border-2 border-white/60">
+                START GAME 💖
             </button>
         </div>
     </main>
 
     <!-- Mobile D-Pad Controls -->
-    <footer class="w-full max-w-xs mt-3 mb-1 block md:hidden">
+    <footer class="w-full max-w-xs mt-3 mb-1 block md:hidden z-10">
         <div class="grid grid-cols-3 gap-2 w-48 h-48 mx-auto items-center justify-items-center">
             <div></div>
-            <button id="btn-up" class="d-btn w-14 h-14 rounded-t-xl text-yellow-400 flex items-center justify-center text-xl">
+            <button id="btn-up" class="d-btn w-14 h-14 rounded-t-2xl text-white flex items-center justify-center text-xl shadow-md">
                 <i class="fas fa-chevron-up"></i>
             </button>
             <div></div>
 
-            <button id="btn-left" class="d-btn w-14 h-14 rounded-l-xl text-yellow-400 flex items-center justify-center text-xl">
+            <button id="btn-left" class="d-btn w-14 h-14 rounded-l-2xl text-white flex items-center justify-center text-xl shadow-md">
                 <i class="fas fa-chevron-left"></i>
             </button>
-            <div class="w-10 h-10 rounded-full bg-gray-900 border border-gray-700 flex items-center justify-center">
-                <div class="w-3 h-3 bg-yellow-400 rounded-full"></div>
+            <div class="w-10 h-10 rounded-full bg-purple-900/60 border border-pink-400/40 flex items-center justify-center shadow-inner">
+                <div class="w-3.5 h-3.5 bg-pink-300 rounded-full animate-ping opacity-75"></div>
             </div>
-            <button id="btn-right" class="d-btn w-14 h-14 rounded-r-xl text-yellow-400 flex items-center justify-center text-xl">
+            <button id="btn-right" class="d-btn w-14 h-14 rounded-r-2xl text-white flex items-center justify-center text-xl shadow-md">
                 <i class="fas fa-chevron-right"></i>
             </button>
 
             <div></div>
-            <button id="btn-down" class="d-btn w-14 h-14 rounded-b-xl text-yellow-400 flex items-center justify-center text-xl">
+            <button id="btn-down" class="d-btn w-14 h-14 rounded-b-2xl text-white flex items-center justify-center text-xl shadow-md">
                 <i class="fas fa-chevron-down"></i>
             </button>
             <div></div>
@@ -145,7 +206,7 @@
 
     <script>
         // ==========================================
-        // AUDIO SYNTHESIZER (Web Audio API)
+        // KAWAII AUDIO SYNTHESIZER (Web Audio API)
         // ==========================================
         class SoundEffects {
             constructor() {
@@ -168,87 +229,88 @@
                 const osc = this.ctx.createOscillator();
                 const gain = this.ctx.createGain();
                 osc.type = 'sine';
-                osc.frequency.setValueAtTime(600, this.ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(850, this.ctx.currentTime + 0.04);
+                osc.frequency.setValueAtTime(700, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1050, this.ctx.currentTime + 0.05);
                 
                 gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
-                gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.04);
+                gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.05);
 
                 osc.connect(gain);
                 gain.connect(this.ctx.destination);
                 osc.start();
-                osc.stop(this.ctx.currentTime + 0.04);
+                osc.stop(this.ctx.currentTime + 0.05);
             }
 
             playPowerPellet() {
                 if (this.muted || !this.ctx) return;
+                const now = this.ctx.currentTime;
                 const osc = this.ctx.createOscillator();
                 const gain = this.ctx.createGain();
                 osc.type = 'triangle';
-                osc.frequency.setValueAtTime(250, this.ctx.currentTime);
-                osc.frequency.linearRampToValueAtTime(650, this.ctx.currentTime + 0.15);
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(880, now + 0.18);
 
-                gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
-                gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.15);
+                gain.gain.setValueAtTime(0.12, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.18);
 
                 osc.connect(gain);
                 gain.connect(this.ctx.destination);
                 osc.start();
-                osc.stop(this.ctx.currentTime + 0.15);
+                osc.stop(now + 0.18);
             }
 
             playEatGhost() {
                 if (this.muted || !this.ctx) return;
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(300, this.ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(1400, this.ctx.currentTime + 0.25);
-
-                gain.gain.setValueAtTime(0.25, this.ctx.currentTime);
-                gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.25);
-
-                osc.connect(gain);
-                gain.connect(this.ctx.destination);
-                osc.start();
-                osc.stop(this.ctx.currentTime + 0.25);
+                const now = this.ctx.currentTime;
+                const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+                notes.forEach((freq, idx) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.05);
+                    gain.gain.setValueAtTime(0.15, now + idx * 0.05);
+                    gain.gain.linearRampToValueAtTime(0.01, now + (idx + 1) * 0.05 + 0.05);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now + idx * 0.05);
+                    osc.stop(now + (idx + 1) * 0.05 + 0.05);
+                });
             }
 
             playFruit() {
                 if (this.muted || !this.ctx) return;
                 const now = this.ctx.currentTime;
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
-                osc.type = 'square';
-                osc.frequency.setValueAtTime(523.25, now); // C5
-                osc.frequency.setValueAtTime(659.25, now + 0.08); // E5
-                osc.frequency.setValueAtTime(783.99, now + 0.16); // G5
-                osc.frequency.setValueAtTime(1046.50, now + 0.24); // C6
-
-                gain.gain.setValueAtTime(0.15, now);
-                gain.gain.linearRampToValueAtTime(0.01, now + 0.35);
-
-                osc.connect(gain);
-                gain.connect(this.ctx.destination);
-                osc.start();
-                osc.stop(now + 0.35);
+                const notes = [659.25, 880, 1046.50, 1318.51]; // E5, A5, C6, E6
+                notes.forEach((freq, idx) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+                    gain.gain.setValueAtTime(0.12, now + idx * 0.06);
+                    gain.gain.linearRampToValueAtTime(0.01, now + (idx + 1) * 0.06 + 0.06);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now + idx * 0.06);
+                    osc.stop(now + (idx + 1) * 0.06 + 0.06);
+                });
             }
 
             playDeath() {
                 if (this.muted || !this.ctx) return;
+                const now = this.ctx.currentTime;
                 const osc = this.ctx.createOscillator();
                 const gain = this.ctx.createGain();
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(600, this.ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(60, this.ctx.currentTime + 0.6);
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(700, now);
+                osc.frequency.exponentialRampToValueAtTime(150, now + 0.5);
 
-                gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
-                gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.6);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.5);
 
                 osc.connect(gain);
                 gain.connect(this.ctx.destination);
                 osc.start();
-                osc.stop(this.ctx.currentTime + 0.6);
+                osc.stop(now + 0.5);
             }
         }
 
@@ -314,7 +376,8 @@
         let fruitTimer = null;
         let fruitSpawned = false;
 
-        // Floating Score Effects
+        // Visual Particle & Sparkle FX
+        let particles = [];
         let floatingTexts = [];
 
         // UI Elements
@@ -334,7 +397,7 @@
 
         function resizeCanvas() {
             const containerWidth = document.getElementById('game-container').clientWidth;
-            const maxHeight = window.innerHeight * 0.58;
+            const maxHeight = window.innerHeight * 0.56;
             tileSize = Math.floor(Math.min(containerWidth / COLS, maxHeight / ROWS));
             canvas.width = COLS * tileSize;
             canvas.height = ROWS * tileSize;
@@ -345,20 +408,23 @@
             render();
         });
 
-        // Floating Text FX Class
-        class FloatingText {
-            constructor(text, x, y, color = '#ffffff') {
-                this.text = text;
+        // Sparkle Particle Class
+        class Particle {
+            constructor(x, y, color) {
                 this.x = x;
                 this.y = y;
+                this.vx = (Math.random() - 0.5) * 1.5;
+                this.vy = (Math.random() - 0.5) * 1.5 - 0.5;
                 this.color = color;
+                this.size = Math.random() * 3 + 2;
                 this.alpha = 1.0;
-                this.life = 40;
+                this.life = 25;
             }
 
             update() {
-                this.y -= 0.02;
-                this.alpha -= 0.025;
+                this.x += this.vx;
+                this.y += this.vy;
+                this.alpha -= 0.04;
                 this.life--;
             }
 
@@ -366,18 +432,73 @@
                 ctx.save();
                 ctx.globalAlpha = Math.max(0, this.alpha);
                 ctx.fillStyle = this.color;
-                ctx.font = `${Math.floor(tileSize * 0.6)}px 'Press Start 2P'`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        function spawnSparkles(gx, gy, color = '#ff9ecc', count = 5) {
+            const px = (gx + 0.5) * tileSize;
+            const py = (gy + 0.5) * tileSize;
+            for (let i = 0; i < count; i++) {
+                particles.push(new Particle(px, py, color));
+            }
+        }
+
+        // Floating Text FX Class
+        class FloatingText {
+            constructor(text, x, y, color = '#ff9ecc') {
+                this.text = text;
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.alpha = 1.0;
+                this.life = 45;
+            }
+
+            update() {
+                this.y -= 0.025;
+                this.alpha -= 0.022;
+                this.life--;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = Math.max(0, this.alpha);
+                ctx.fillStyle = this.color;
+                ctx.font = `bold ${Math.floor(tileSize * 0.65)}px 'Fredoka', sans-serif`;
                 ctx.textAlign = 'center';
+                ctx.shadowColor = 'rgba(255, 158, 204, 0.6)';
+                ctx.shadowBlur = 6;
                 ctx.fillText(this.text, (this.x + 0.5) * tileSize, (this.y + 0.5) * tileSize);
                 ctx.restore();
             }
         }
 
-        function addScorePopup(text, x, y, color = '#3b82f6') {
+        function addScorePopup(text, x, y, color = '#ff9ecc') {
             floatingTexts.push(new FloatingText(text, x, y, color));
         }
 
-        // PAC-MAN CLASS
+        // Helper to draw cute hearts on Canvas
+        function drawHeart(ctx, cx, cy, size, color) {
+            ctx.save();
+            ctx.translate(cx, cy);
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            const topCurveHeight = size * 0.3;
+            ctx.moveTo(0, topCurveHeight);
+            ctx.bezierCurveTo(0, 0, -size / 2, 0, -size / 2, topCurveHeight);
+            ctx.bezierCurveTo(-size / 2, (size + topCurveHeight) / 2, 0, size, 0, size);
+            ctx.bezierCurveTo(0, size, size / 2, (size + topCurveHeight) / 2, size / 2, topCurveHeight);
+            ctx.bezierCurveTo(size / 2, 0, 0, 0, 0, topCurveHeight);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+        }
+
+        // PAC-MAN CLASS (KAWAII VERSION 🎀)
         class Pacman {
             constructor() {
                 this.reset();
@@ -386,12 +507,12 @@
             reset() {
                 this.x = 9.5;
                 this.y = 16;
-                this.speed = 0.11 + (stage - 1) * 0.005; // Slightly faster each stage
+                this.speed = 0.11 + (stage - 1) * 0.005;
                 this.dir = DIR_NONE;
                 this.nextDir = DIR_NONE;
                 this.mouthAngle = 0.2;
                 this.mouthSpeed = 0.02;
-                this.radius = 0.45;
+                this.radius = 0.46;
             }
 
             update() {
@@ -431,6 +552,7 @@
                         score += 10;
                         eatenPellets++;
                         sound.playPellet();
+                        spawnSparkles(currentGridX, currentGridY, '#ffe066', 3);
                         updateScore();
                         checkFruitSpawn();
                     } else if (tile === 3) { // Power Pellet
@@ -438,6 +560,8 @@
                         score += 50;
                         eatenPellets++;
                         sound.playPowerPellet();
+                        spawnSparkles(currentGridX, currentGridY, '#ff9ecc', 8);
+                        addScorePopup('POWER! 💖', currentGridX, currentGridY, '#ff9ecc');
                         updateScore();
                         triggerPowerMode();
                         checkFruitSpawn();
@@ -452,7 +576,8 @@
                         const fruitPts = 200 * stage;
                         score += fruitPts;
                         sound.playFruit();
-                        addScorePopup(`+${fruitPts}`, 9, 12, '#ff4081');
+                        spawnSparkles(9, 12, '#ff6b8b', 12);
+                        addScorePopup(`+${fruitPts} 🍓`, 9, 12, '#ff6b8b');
                         updateScore();
                     }
                 }
@@ -484,20 +609,60 @@
 
                 ctx.save();
                 ctx.translate(px, py);
-                ctx.rotate(rotation);
 
+                // Body Gradient (Pastel Yellow)
+                ctx.rotate(rotation);
                 ctx.beginPath();
                 ctx.arc(0, 0, r, this.mouthAngle * Math.PI, (2 - this.mouthAngle) * Math.PI);
                 ctx.lineTo(0, 0);
-                ctx.fillStyle = '#ffeb3b';
+                
+                const grad = ctx.createRadialGradient(-r * 0.2, -r * 0.2, r * 0.1, 0, 0, r);
+                grad.addColorStop(0, '#ffffff');
+                grad.addColorStop(0.3, '#ffe066');
+                grad.addColorStop(1, '#ffd13b');
+                ctx.fillStyle = grad;
                 ctx.fill();
                 ctx.closePath();
+
+                // Cute Rosy Blush Cheeks
+                ctx.fillStyle = 'rgba(255, 120, 160, 0.6)';
+                ctx.beginPath();
+                ctx.ellipse(-r * 0.1, r * 0.4, r * 0.22, r * 0.14, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Kawaii Eyes with Sparkle
+                ctx.rotate(-rotation); // Un-rotate for eyes orientation
+                const eyeOffsetX = (this.dir === DIR_LEFT ? -0.2 : (this.dir === DIR_RIGHT ? 0.25 : 0.05)) * r;
+                const eyeOffsetY = (this.dir === DIR_UP ? -0.3 : (this.dir === DIR_DOWN ? 0.2 : -0.25)) * r;
+
+                // Eye Socket
+                ctx.fillStyle = '#2d1a3b';
+                ctx.beginPath();
+                ctx.ellipse(eyeOffsetX, eyeOffsetY, r * 0.2, r * 0.26, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Eye Sparkle
+                ctx.fillStyle = '#ffffff';
+                ctx.beginPath();
+                ctx.arc(eyeOffsetX - r * 0.06, eyeOffsetY - r * 0.08, r * 0.08, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Cute Pink Bow Ribbon on Top 🎀
+                ctx.fillStyle = '#ff9ecc';
+                ctx.beginPath();
+                ctx.ellipse(-r * 0.35, -r * 0.85, r * 0.25, r * 0.16, -Math.PI / 6, 0, Math.PI * 2);
+                ctx.ellipse(r * 0.35, -r * 0.85, r * 0.25, r * 0.16, Math.PI / 6, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = '#ff6b8b';
+                ctx.beginPath();
+                ctx.arc(0, -r * 0.85, r * 0.12, 0, Math.PI * 2);
+                ctx.fill();
 
                 ctx.restore();
             }
         }
 
-        // GHOST CLASS WITH UNIQUE AI PERSONALITIES
+        // GHOST CLASS (KAWAII ANIME STYLE GHOSTS 👻💖)
         class Ghost {
             constructor(color, startX, startY, personality) {
                 this.color = color;
@@ -533,26 +698,21 @@
 
                     if (possibleDirs.length > 0) {
                         if (this.isScared) {
-                            // Scared mode: Random movement
                             this.dir = possibleDirs[Math.floor(Math.random() * possibleDirs.length)];
                         } else {
-                            // Calculate Target Tile based on Personality
                             let targetX = pacman.x;
                             let targetY = pacman.y;
 
                             if (this.personality === 'PINKY') {
-                                // Target 4 tiles ahead of Pac-Man
                                 targetX = pacman.x + pacman.dir.x * 4;
                                 targetY = pacman.y + pacman.dir.y * 4;
                             } else if (this.personality === 'INKY') {
-                                // Flank targeting using Blinky's position
                                 const blinky = ghosts[0];
                                 const aheadX = pacman.x + pacman.dir.x * 2;
                                 const aheadY = pacman.y + pacman.dir.y * 2;
                                 targetX = aheadX + (aheadX - blinky.x);
                                 targetY = aheadY + (aheadY - blinky.y);
                             } else if (this.personality === 'CLYDE') {
-                                // Chase if far (>8 tiles), retreat to corner if close
                                 const distToPacman = Math.hypot(gridX - pacman.x, gridY - pacman.y);
                                 if (distToPacman < 8) {
                                     targetX = 0;
@@ -560,7 +720,6 @@
                                 }
                             }
 
-                            // Choose direction that minimizes distance to target
                             this.dir = possibleDirs.reduce((best, d) => {
                                 const distCurrent = Math.hypot((gridX + d.x) - targetX, (gridY + d.y) - targetY);
                                 const distBest = Math.hypot((gridX + best.x) - targetX, (gridY + best.y) - targetY);
@@ -575,7 +734,6 @@
                 this.x += this.dir.x * currentSpeed;
                 this.y += this.dir.y * currentSpeed;
 
-                // Tunnels
                 if (this.x < -0.5) this.x = COLS - 0.5;
                 if (this.x >= COLS - 0.5) this.x = -0.5;
             }
@@ -583,53 +741,85 @@
             draw() {
                 const px = (this.x + 0.5) * tileSize;
                 const py = (this.y + 0.5) * tileSize;
-                const r = 0.45 * tileSize;
+                const r = 0.46 * tileSize;
 
-                ctx.fillStyle = this.isScared 
-                    ? (ghostScaredTime < 2000 && Math.floor(Date.now() / 200) % 2 === 0 ? '#ffffff' : '#2196f3') 
-                    : this.color;
+                ctx.save();
+                ctx.translate(px, py);
 
+                // Body Color Scheme
+                let bodyColor = this.color;
+                if (this.isScared) {
+                    bodyColor = (ghostScaredTime < 2000 && Math.floor(Date.now() / 150) % 2 === 0) 
+                        ? '#fbcfe8'  // Flashing Kawaii Light Pink
+                        : '#60a5fa'; // Scared Soft Pastel Blue
+                }
+
+                // Smooth Ghost Head & Wavy Feet Path
+                ctx.fillStyle = bodyColor;
                 ctx.beginPath();
-                ctx.arc(px, py - r * 0.2, r, Math.PI, 0, false);
-                ctx.lineTo(px + r, py + r);
-                ctx.lineTo(px + r * 0.5, py + r * 0.6);
-                ctx.lineTo(px, py + r);
-                ctx.lineTo(px - r * 0.5, py + r * 0.6);
-                ctx.lineTo(px - r, py + r);
+                ctx.arc(0, -r * 0.2, r, Math.PI, 0, false);
+                
+                // Wavy Scallop Feet (3 cute loops)
+                const footY = r * 0.9;
+                ctx.lineTo(r, footY);
+                ctx.quadraticCurveTo(r * 0.66, footY - r * 0.35, r * 0.33, footY);
+                ctx.quadraticCurveTo(0, footY - r * 0.35, -r * 0.33, footY);
+                ctx.quadraticCurveTo(-r * 0.66, footY - r * 0.35, -r, footY);
                 ctx.closePath();
                 ctx.fill();
 
-                // Eyes
                 if (!this.isScared) {
-                    ctx.fillStyle = '#ffffff';
+                    // Cute Rosy Blush Cheeks
+                    ctx.fillStyle = 'rgba(255, 100, 150, 0.45)';
                     ctx.beginPath();
-                    ctx.arc(px - r * 0.35, py - r * 0.2, r * 0.3, 0, Math.PI * 2);
-                    ctx.arc(px + r * 0.35, py - r * 0.2, r * 0.3, 0, Math.PI * 2);
+                    ctx.ellipse(-r * 0.55, -r * 0.05, r * 0.18, r * 0.1, 0, 0, Math.PI * 2);
+                    ctx.ellipse(r * 0.55, -r * 0.05, r * 0.18, r * 0.1, 0, 0, Math.PI * 2);
                     ctx.fill();
 
-                    // Pupils
-                    ctx.fillStyle = '#0d47a1';
-                    ctx.beginPath();
-                    ctx.arc(px - r * 0.35 + this.dir.x * 2, py - r * 0.2 + this.dir.y * 2, r * 0.15, 0, Math.PI * 2);
-                    ctx.arc(px + r * 0.35 + this.dir.x * 2, py - r * 0.2 + this.dir.y * 2, r * 0.15, 0, Math.PI * 2);
-                    ctx.fill();
-                } else {
-                    // Scared Face
+                    // Kawaii Big Anime Eyes
+                    const eyeDx = this.dir.x * r * 0.12;
+                    const eyeDy = this.dir.y * r * 0.12;
+
+                    // Left & Right Whites
                     ctx.fillStyle = '#ffffff';
                     ctx.beginPath();
-                    ctx.arc(px - r * 0.3, py, r * 0.1, 0, Math.PI * 2);
-                    ctx.arc(px + r * 0.3, py, r * 0.1, 0, Math.PI * 2);
+                    ctx.ellipse(-r * 0.35 + eyeDx, -r * 0.25 + eyeDy, r * 0.28, r * 0.35, 0, 0, Math.PI * 2);
+                    ctx.ellipse(r * 0.35 + eyeDx, -r * 0.25 + eyeDy, r * 0.28, r * 0.35, 0, 0, Math.PI * 2);
                     ctx.fill();
+
+                    // Dark Pupils (Navy/Purple)
+                    ctx.fillStyle = '#1e1b4b';
+                    ctx.beginPath();
+                    ctx.ellipse(-r * 0.35 + eyeDx * 1.5, -r * 0.22 + eyeDy * 1.5, r * 0.16, r * 0.22, 0, 0, Math.PI * 2);
+                    ctx.ellipse(r * 0.35 + eyeDx * 1.5, -r * 0.22 + eyeDy * 1.5, r * 0.16, r * 0.22, 0, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Sparkle White Dots in Pupils ✨
+                    ctx.fillStyle = '#ffffff';
+                    ctx.beginPath();
+                    ctx.arc(-r * 0.4 + eyeDx * 1.5, -r * 0.28 + eyeDy * 1.5, r * 0.07, 0, Math.PI * 2);
+                    ctx.arc(r * 0.3 + eyeDx * 1.5, -r * 0.28 + eyeDy * 1.5, r * 0.07, 0, Math.PI * 2);
+                    ctx.fill();
+
+                } else {
+                    // Scared Kawaii Face (>_<) or ( ; _ ; )
+                    ctx.fillStyle = '#ffffff';
+                    ctx.font = `bold ${Math.floor(r * 0.9)}px 'Fredoka', sans-serif`;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText('＞＜', 0, -r * 0.1);
                 }
+
+                ctx.restore();
             }
         }
 
         const pacman = new Pacman();
         const ghosts = [
-            new Ghost('#ff0000', 9, 9, 'BLINKY'), // Blinky
-            new Ghost('#ffb8ff', 9, 10, 'PINKY'), // Pinky
-            new Ghost('#00ffff', 8, 10, 'INKY'),  // Inky
-            new Ghost('#ffb852', 10, 10, 'CLYDE') // Clyde
+            new Ghost('#ff6b8b', 9, 9, 'BLINKY'), // Strawberry Coral
+            new Ghost('#ff9ecc', 9, 10, 'PINKY'), // Bubblegum Pink
+            new Ghost('#70e0d8', 8, 10, 'INKY'),  // Mint Cyan
+            new Ghost('#ffb366', 10, 10, 'CLYDE') // Soft Peach
         ];
 
         function isWalkable(x, y) {
@@ -645,7 +835,7 @@
         function triggerPowerMode() {
             ghostEatCombo = 0;
             ghosts.forEach(g => g.isScared = true);
-            ghostScaredTime = Math.max(3000, 7000 - (stage - 1) * 800); // Shorter scared time per level
+            ghostScaredTime = Math.max(3000, 7000 - (stage - 1) * 800);
             
             if (powerModeTimer) clearInterval(powerModeTimer);
             const startTime = Date.now();
@@ -665,7 +855,6 @@
                 fruitSpawned = true;
                 fruitActive = true;
                 
-                // Fruit despawns after 9 seconds
                 if (fruitTimer) clearTimeout(fruitTimer);
                 fruitTimer = setTimeout(() => {
                     fruitActive = false;
@@ -682,7 +871,6 @@
                 localStorage.setItem('pacman_high_score', highScore);
             }
 
-            // Check Level Clear Condition
             if (eatenPellets >= totalPellets) {
                 nextStage();
             }
@@ -692,20 +880,18 @@
             gameRunning = false;
             stage++;
             overlay.classList.remove('hidden');
-            overlayTitle.innerText = `STAGE ${stage}`;
-            overlayTitle.className = "text-2xl md:text-3xl text-green-400 mb-4 animate-bounce";
-            overlaySubtitle.innerText = "GET READY!";
-            startBtn.innerText = "START STAGE";
+            overlayTitle.innerText = `STAGE ${stage} CLEAR! 🌸`;
+            overlayTitle.className = "text-2xl md:text-3xl font-kawaii text-glow-yellow mb-3 animate-bounce";
+            overlaySubtitle.innerText = "つぎのステージにちょうせん！✨";
+            startBtn.innerText = "NEXT STAGE 💕";
         }
 
         function updateLivesUI() {
             livesContainer.innerHTML = '';
             for (let i = 0; i < lives - 1; i++) {
-                const icon = document.createElement('div');
-                icon.className = 'w-4 h-4 rounded-full bg-yellow-400';
-                icon.style.clipPath = 'polygon(100% 0%, 100% 100%, 0% 100%, 0% 0%, 50% 50%)';
-                icon.style.transform = 'rotate(-45deg)';
-                livesContainer.appendChild(icon);
+                const heart = document.createElement('i');
+                heart.className = 'fas fa-heart text-pink-400 text-sm animate-pulse';
+                livesContainer.appendChild(heart);
             }
         }
 
@@ -714,16 +900,15 @@
                 const dist = Math.hypot(pacman.x - ghost.x, pacman.y - ghost.y);
                 if (dist < 0.6) {
                     if (ghost.isScared) {
-                        // Eat Ghost (Combo Multiplier: 200, 400, 800, 1600)
                         ghostEatCombo++;
                         const pts = Math.min(1600, 200 * Math.pow(2, ghostEatCombo - 1));
                         sound.playEatGhost();
                         score += pts;
-                        addScorePopup(`+${pts}`, ghost.x, ghost.y, '#00ffff');
+                        spawnSparkles(ghost.x, ghost.y, '#70e0d8', 10);
+                        addScorePopup(`+${pts} 💖`, ghost.x, ghost.y, '#70e0d8');
                         updateScore();
                         ghost.reset();
                     } else {
-                        // Death
                         sound.playDeath();
                         lives--;
                         updateLivesUI();
@@ -740,8 +925,11 @@
             });
         }
 
-        // DRAW FUNCTIONS
+        // DRAW MAP WITH SMOOTH PASTEL CANDY WALLS
         function drawMap() {
+            const wallColor = '#c084fc';
+            const wallInner = '#2a1a45';
+
             for (let r = 0; r < ROWS; r++) {
                 for (let c = 0; c < COLS; c++) {
                     const tile = map[r][c];
@@ -749,51 +937,62 @@
                     const y = r * tileSize;
 
                     if (tile === 1) { // Wall
-                        ctx.fillStyle = '#1d4ed8';
-                        ctx.strokeStyle = '#3b82f6';
-                        ctx.lineWidth = 1;
-                        ctx.fillRect(x, y, tileSize, tileSize);
-                        ctx.strokeRect(x, y, tileSize, tileSize);
-                    } else if (tile === 2) { // Pellet
-                        ctx.fillStyle = '#ffeb3b';
+                        ctx.save();
+                        ctx.fillStyle = wallInner;
+                        ctx.strokeStyle = wallColor;
+                        ctx.lineWidth = Math.max(1.5, tileSize * 0.08);
+
+                        // Draw Rounded Wall Blocks
+                        const cornerRadius = tileSize * 0.25;
                         ctx.beginPath();
-                        ctx.arc(x + tileSize / 2, y + tileSize / 2, tileSize * 0.12, 0, Math.PI * 2);
+                        ctx.roundRect(x + 1, y + 1, tileSize - 2, tileSize - 2, cornerRadius);
                         ctx.fill();
-                    } else if (tile === 3) { // Power Pellet
-                        ctx.fillStyle = '#ffeb3b';
+                        ctx.stroke();
+                        ctx.restore();
+                    } else if (tile === 2) { // Small Pellet (Glowing Pastel Yellow Dot)
+                        ctx.save();
+                        ctx.fillStyle = '#ffe066';
+                        ctx.shadowColor = 'rgba(255, 224, 102, 0.7)';
+                        ctx.shadowBlur = 6;
                         ctx.beginPath();
-                        ctx.arc(x + tileSize / 2, y + tileSize / 2, tileSize * 0.3, 0, Math.PI * 2);
+                        ctx.arc(x + tileSize / 2, y + tileSize / 2, tileSize * 0.13, 0, Math.PI * 2);
                         ctx.fill();
+                        ctx.restore();
+                    } else if (tile === 3) { // Power Pellet (Kawaii Pulsing Heart 💖)
+                        const pulseScale = 1 + Math.sin(Date.now() / 150) * 0.15;
+                        const heartSize = tileSize * 0.38 * pulseScale;
+                        drawHeart(ctx, x + tileSize / 2, y + tileSize / 2 - heartSize / 2, heartSize, '#ff9ecc');
                     } else if (tile === 4) { // Ghost Gate
-                        ctx.fillStyle = '#f472b6';
-                        ctx.fillRect(x, y + tileSize * 0.4, tileSize, tileSize * 0.2);
+                        ctx.save();
+                        ctx.fillStyle = '#ff9ecc';
+                        ctx.beginPath();
+                        ctx.roundRect(x, y + tileSize * 0.4, tileSize, tileSize * 0.2, 4);
+                        ctx.fill();
+                        ctx.restore();
                     }
                 }
             }
         }
 
+        // KAWAII FRUIT RENDERER (Strawberry 🍓, Peach 🍑, Cake 🍰)
         function drawFruit() {
             if (!fruitActive) return;
             const fx = 9.5 * tileSize;
             const fy = 12.5 * tileSize;
-            const r = tileSize * 0.38;
+            const size = tileSize * 0.8;
 
-            // Render Cherry Icon
-            ctx.fillStyle = '#ef4444';
-            ctx.beginPath();
-            ctx.arc(fx - r * 0.3, fy + r * 0.2, r * 0.5, 0, Math.PI * 2);
-            ctx.arc(fx + r * 0.3, fy + r * 0.1, r * 0.5, 0, Math.PI * 2);
-            ctx.fill();
+            ctx.save();
+            ctx.font = `${Math.floor(size)}px sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            
+            let fruitEmoji = '🍓';
+            if (stage === 2) fruitEmoji = '🍑';
+            if (stage === 3) fruitEmoji = '🍰';
+            if (stage >= 4) fruitEmoji = '🍮';
 
-            // Stems
-            ctx.strokeStyle = '#22c55e';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(fx - r * 0.3, fy + r * 0.1);
-            ctx.quadraticCurveTo(fx, fy - r * 0.5, fx + r * 0.2, fy - r * 0.6);
-            ctx.moveTo(fx + r * 0.3, fy + r * 0.1);
-            ctx.quadraticCurveTo(fx, fy - r * 0.5, fx + r * 0.2, fy - r * 0.6);
-            ctx.stroke();
+            ctx.fillText(fruitEmoji, fx, fy);
+            ctx.restore();
         }
 
         function render() {
@@ -802,6 +1001,14 @@
             drawFruit();
             pacman.draw();
             ghosts.forEach(ghost => ghost.draw());
+
+            // Particle Updates & Render
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.update();
+                p.draw();
+                if (p.life <= 0) particles.splice(i, 1);
+            }
 
             // Floating Text FX Updates & Render
             for (let i = floatingTexts.length - 1; i >= 0; i--) {
@@ -863,10 +1070,10 @@
         function endGame(isWin) {
             gameRunning = false;
             overlay.classList.remove('hidden');
-            overlayTitle.innerText = "GAME OVER";
-            overlayTitle.className = "text-2xl md:text-3xl text-red-500 mb-4 animate-pulse";
-            overlaySubtitle.innerText = `最終スコア: ${score}\n到達ステージ: ${stage}`;
-            startBtn.innerText = "PLAY AGAIN";
+            overlayTitle.innerText = "GAME OVER 🥺";
+            overlayTitle.className = "text-2xl md:text-3xl font-kawaii text-pink-400 mb-3 animate-pulse";
+            overlaySubtitle.innerText = `スコア: ${score}\nステージ: ${stage} でがんばったね！💕`;
+            startBtn.innerText = "RETRY 💖";
         }
 
         // Controller Handlers
@@ -887,7 +1094,7 @@
             }
         });
 
-        // Touch Swipe Gesture Controls (Canvas Direct Touch)
+        // Touch Swipe Controls
         let touchStartX = 0;
         let touchStartY = 0;
 
@@ -923,13 +1130,13 @@
         soundBtn.addEventListener('click', () => {
             sound.muted = !sound.muted;
             if (sound.muted) {
-                soundIcon.className = 'fas fa-volume-mute';
+                soundIcon.className = 'fas fa-volume-mute text-gray-400';
                 soundText.innerText = 'SOUND OFF';
-                soundBtn.classList.replace('text-yellow-400', 'text-gray-400');
+                soundBtn.classList.replace('text-pink-200', 'text-gray-400');
             } else {
-                soundIcon.className = 'fas fa-volume-up';
+                soundIcon.className = 'fas fa-volume-up text-pink-300';
                 soundText.innerText = 'SOUND ON';
-                soundBtn.classList.replace('text-gray-400', 'text-yellow-400');
+                soundBtn.classList.replace('text-gray-400', 'text-pink-200');
                 sound.init();
             }
         });
